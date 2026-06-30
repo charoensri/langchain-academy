@@ -230,8 +230,10 @@ def task_mAIstro(state: MessagesState, config: RunnableConfig, store: BaseStore)
     
     system_msg = MODEL_SYSTEM_MESSAGE.format(user_profile=user_profile, todo=todo, instructions=instructions)
 
+    print(model)
     # Respond using memory as well as the chat history
-    response = model.bind_tools([UpdateMemory], parallel_tool_calls=False).invoke([SystemMessage(content=system_msg)]+state["messages"])
+    #response = model.bind_tools([UpdateMemory], parallel_tool_calls=False).invoke([SystemMessage(content=system_msg)]+state["messages"])
+    response = model.bind_tools([UpdateMemory]).invoke([SystemMessage(content=system_msg)]+state["messages"])
 
     return {"messages": [response]}
 
@@ -389,3 +391,5 @@ builder.add_edge("update_instructions", "task_mAIstro")
 
 # Compile the graph
 graph = builder.compile()
+
+

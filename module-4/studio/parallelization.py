@@ -9,10 +9,12 @@ from langchain_community.document_loaders import WikipediaLoader
 from langchain_tavily import TavilySearch  # updated 1.0
 
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
 from langgraph.graph import StateGraph, START, END
 
-llm = ChatOpenAI(model="gpt-4o", temperature=0) 
+#llm = ChatOpenAI(model="gpt-4o", temperature=0)
+llm = ChatOllama(model="gpt-oss:20b", temperature=0) 
 
 class State(TypedDict):
     question: str

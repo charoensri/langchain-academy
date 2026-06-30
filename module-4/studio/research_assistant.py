@@ -7,13 +7,18 @@ from langchain_community.document_loaders import WikipediaLoader
 from langchain_tavily import TavilySearch  # updated 1.0
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, get_buffer_string
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama 
+
+
 
 from langgraph.constants import Send
 from langgraph.graph import END, MessagesState, START, StateGraph
 
 ### LLM
 
-llm = ChatOpenAI(model="gpt-4o", temperature=0) 
+#llm = ChatOpenAI(model="gpt-4o", temperature=0) 
+#llm = ChatOllama(model="gpt-oss:20b", temperature=0) 
+llm = ChatOllama(model="deepseek-r1:1.5b", temperature=0) 
 
 ### Schema 
 

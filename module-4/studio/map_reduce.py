@@ -5,6 +5,7 @@ from typing_extensions import TypedDict
 from pydantic import BaseModel
 
 from langchain_openai import ChatOpenAI 
+from langchain_ollama import ChatOllama 
 
 from langgraph.constants import Send
 from langgraph.graph import END, StateGraph, START
@@ -15,7 +16,8 @@ joke_prompt = """Generate a joke about {subject}"""
 best_joke_prompt = """Below are a bunch of jokes about {topic}. Select the best one! Return the ID of the best one, starting 0 as the ID for the first joke. Jokes: \n\n  {jokes}"""
 
 # LLM
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+#model = ChatOpenAI(model="gpt-4o", temperature=0) 
+model = ChatOllama(model="gpt-oss:20b", temperature=0) 
 
 # Define the state
 class Subjects(BaseModel):
@@ -30,10 +32,20 @@ class OverallState(TypedDict):
     jokes: Annotated[list, operator.add]
     best_selected_joke: str
 
+# def generate_topics(state: OverallState):
+#     prompt = subjects_prompt.format(topic=state["topic"])
+#     response = model.with_structured_output(Subjects).invoke(prompt)
+#     return {"subjects": response.subjects}
+
+
 def generate_topics(state: OverallState):
+    if "topic" not in state:
+        raise ValueError("Missing required key: 'topic'")
+    
     prompt = subjects_prompt.format(topic=state["topic"])
     response = model.with_structured_output(Subjects).invoke(prompt)
     return {"subjects": response.subjects}
+
 
 class JokeState(TypedDict):
     subject: str

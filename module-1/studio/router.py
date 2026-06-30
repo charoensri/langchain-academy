@@ -1,4 +1,5 @@
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 from langgraph.graph import MessagesState
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
@@ -14,7 +15,16 @@ def multiply(a: int, b: int) -> int:
     return a * b
 
 # LLM with bound tool
-llm = ChatOpenAI(model="gpt-4o")
+#llm = ChatOpenAI(model="gpt-4o")
+
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(
+    model="gpt-oss:20b",
+    temperature=0,
+    base_url="http://localhost:11434"
+)
+#llm = ChatOllama(model="gpt-oss:20b", temperature=0)
 llm_with_tools = llm.bind_tools([multiply])
 
 # Node

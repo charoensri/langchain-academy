@@ -1,8 +1,13 @@
+from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage
-from langchain_openai import ChatOpenAI
+#from langchain_openai import ChatOpenAI
+
+
+
 
 from langgraph.graph import START, StateGraph, MessagesState
 from langgraph.prebuilt import tools_condition, ToolNode
+
 
 def add(a: int, b: int) -> int:
     """Adds a and b.
@@ -34,7 +39,43 @@ def divide(a: int, b: int) -> float:
 tools = [add, multiply, divide]
 
 # Define LLM with bound tools
-llm = ChatOpenAI(model="gpt-4o")
+#llm = ChatOpenAI(model="gpt-4o")
+
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(
+    model="llama3.2",
+    temperature=0,
+    base_url="http://localhost:11434"
+)
+
+from langchain.agents import create_agent
+from langchain_core.tools import tool
+
+tools = [add, multiply, divide]
+
+# Define LLM with bound tools
+#llm = ChatOpenAI(model="gpt-4o")
+
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(
+    model="llama3.2",
+    temperature=0,
+    base_url="http://localhost:11434"
+)
+
+# agent = create_agent(
+#     #model="gpt-5-nano",
+#     name="math_agent",
+#     model=llm,
+#     #tools=[tools],
+#     tools=tools
+
+# )
+
+
+
 llm_with_tools = llm.bind_tools(tools)
 
 # System message
@@ -43,6 +84,7 @@ sys_msg = SystemMessage(content="You are a helpful assistant tasked with writing
 # Node
 def assistant(state: MessagesState):
    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
+   #return {"messages": [agent.invoke([sys_msg] + state["messages"])]}
 
 # Build graph
 builder = StateGraph(MessagesState)

@@ -5,7 +5,10 @@ from langgraph.graph import StateGraph, START, END
 
 # We will use this model for both the conversation and the summarization
 from langchain_openai import ChatOpenAI
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+from langchain_ollama import ChatOllama
+
+#model = ChatOpenAI(model="gpt-4o", temperature=0) 
+model = ChatOllama(model="gpt-oss:20b", temperature=0) 
 
 # State class to store messages and summary
 class State(MessagesState):
@@ -66,6 +69,7 @@ def summarize_conversation(state: State):
 
     # Add prompt to our history
     messages = state["messages"] + [HumanMessage(content=summary_message)]
+    
     response = model.invoke(messages)
     
     # Delete all but the 2 most recent messages and add our summary to the state 

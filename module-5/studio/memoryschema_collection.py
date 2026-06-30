@@ -8,12 +8,15 @@ from langchain_core.messages import SystemMessage
 from langchain_core.messages import merge_message_runs
 from langchain_core.runnables.config import RunnableConfig
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.store.base import BaseStore
 import configuration
 
 # Initialize the LLM
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+#model = ChatOpenAI(model="gpt-4o", temperature=0) 
+model = ChatOpenAI(model="gpt-oss:20b", temperature=0) 
+#model = ChatOpenAI(model="gpt-4o", temperature=0) 
 
 # Memory schema
 class Memory(BaseModel):

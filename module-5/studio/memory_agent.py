@@ -1,17 +1,14 @@
 import uuid
 from datetime import datetime
-
 from pydantic import BaseModel, Field
-
 from trustcall import create_extractor
-
 from typing import Literal, Optional, TypedDict
-
 from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import merge_message_runs
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from langchain_openai import ChatOpenAI
+#from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, MessagesState, START, END
@@ -125,7 +122,8 @@ class UpdateMemory(TypedDict):
     update_type: Literal['user', 'todo', 'instructions']
 
 # Initialize the model
-model = ChatOpenAI(model="gpt-4o", temperature=0)
+#model = ChatOpenAI(model="gpt-4o", temperature=0)
+model = ChatOllama(model="qwen2.5:3b", temperature=0)
 
 ## Create the Trustcall extractors for updating the user profile and ToDo list
 profile_extractor = create_extractor(
